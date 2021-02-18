@@ -7,13 +7,13 @@ typedef struct node {
 
 int push(stack* st, int value)
 {
-    node* newnode = malloc(sizeof(node));
-    if (newnode == NULL) return FAILED;
+    node* newnode = (node*)malloc(sizeof(node));
+    if (newnode == NULL) return PUSH_FAILURE;
 
     newnode->value = value;
     newnode->next = *st;
     *st = newnode;
-    return SUCCESS;
+    return PUSH_SUCCESS;
 }
 
 int pop(stack* st)
@@ -32,3 +32,8 @@ int peek(stack* st)
     return (*st == NULL) ? STACK_EMPTY : (*st)->value;
 }
 
+
+void destroyStack(stack* st)
+{
+    while(pop(st) != STACK_EMPTY);
+}
