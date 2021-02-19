@@ -1,15 +1,50 @@
-CC = x86_64-w64-mingw32-gcc
-CFLAGS = -Wall -std=c17 -g
+# compiler settings
+CC = gcc
+CFLAGS = -Wall -std=c17
 
-bfi.exe: obj/main.o obj/stack.o
-	$(CC) obj/main.o obj/stack.o -o bfi.exe $(CFLAGS)
+# projext files
+OBJDIR = obj
+SRCS   = main.c stack.c
+OBJS   = $(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
+EXE    = bfi
 
-obj/main.o: main.c
-	$(CC) -c main.c -o obj/main.o $(CFLAGS)
+# debug stuff
+DBGFLAGS = -g -O0
 
-obj/stack.o: stack.c
-	$(CC) -c stack.c -o obj/stack.o $(CFLAGS)
+# release stuff
+RELFLAGS = -O3
+
+# wondows stuff
+CCWIN   = x86_64-w64-mingw32-gcc
+WINEXE  = $(EXE).exe
+WINOBJDIR  = obj/win
+WINOBJS = $(addprefix $(WINOBJDIR)/, $(SRCS:.c=.o))
+
+
+.PHONY: all clean linux win
+
+# default build
+all: prep linux
+
+linux: $(EXE)
+
+$(EXE): $(OBJS)
+	$(CC) $(CFLAGS) $(DBGFLAGS) -o $(EXE) $^
+
+$(OBJDIR)/%.o: %.c
+	$(CC) -c $(CFLAGS) $(DBGFLAGS) -o $@ $<
+
+win: prep $(WINEXE)
+
+$(WINEXE): $(WINOBJS)
+	$(CCWIN) $(CFLAGS) $(DBGFLAGS) -o $(WINEXE) $(CFLAGS) $^
+
+$(WINOBJDIR)/%.o: %.c
+	$(CCWIN) -c $(CFLAGS) $(DBGFLAGS) -o $@ $<
+
 
 clean:
-	rm obj/*.o
-	rm *.exe
+	rm -f $(OBJS) $(WINOBJS) $(EXE) $(WINEXE) 
+
+prep:
+	@mkdir -p $(OBJDIR) $(WINOBJDIR)
