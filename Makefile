@@ -4,7 +4,7 @@ CFLAGS = -Wall -std=c17
 
 # projext files
 OBJDIR = obj
-SRCS   = main.c stack.c
+SRCS   = main.c stack.c fileUtils.c
 OBJS   = $(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
 EXE    = bfi
 
