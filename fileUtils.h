@@ -1,4 +1,4 @@
-#ifndef FILE_UTIL
+#ifndef FILE_UTILS
 #define FILE_UTILS
 #include <stdio.h>
 #include <stdlib.h>

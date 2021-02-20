@@ -1,5 +1,5 @@
 # compiler settings
-CC = gcc
+CC = clang
 CFLAGS = -Wall -std=c17
 
 # projext files

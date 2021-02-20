@@ -32,8 +32,8 @@ int interpretCode (char* code)
 		memory[i] = 0;
 	uint index = 0;
 	while (*code != 0) {
-		int res = interpretInstruction(code, memory, index);
-		if (res != 0) {
+		index = interpretInstruction(code, memory, index);
+		if (index < 0) {
 			free(memory);
 			return -1;
 		}
@@ -48,42 +48,43 @@ int interpretInstruction (char* instruction, unsigned char* ptr, uint index)
 {
 	// instead of using some operator junk like (*index)++ or something like that
 	// i just prefer to store the value in a variable and then just store it there
-	int value = *ptr;
+	int value = ptr[index];
 	switch (*instruction)
 	{
 	case '+':
 		// check that the instruction isn't going above tha max value of uchar
 		if (value >= 255)
 			return VALUE_OUT_OF_BOUNDS;
-		*ptr = value + 1;
+		ptr[index] = value + 1;
 		break;
 	case '-':
 		// check that the instruction isn't going below zero
         if (value <= 0) 
 			return VALUE_OUT_OF_BOUNDS;
-		*ptr = value - 1;
+		ptr[index] = value - 1;
 		break;
 	case '<':
 		// check that the pointer is not going below ptr[0]
 		if (index <= 0) 
 			return MEMORY_OUT_OF_BOUNDS;
-		ptr--;
 		index--;
 		break;
 	case '>':
 		// check that the pointer is not going above ptr[MAX_MEM_SIZE]
 		if (index >= MAX_MEM_SIZE - 1) 
 			return MEMORY_OUT_OF_BOUNDS;
-		ptr++;
 		index++;
 		break;
 	case '.': 
 		//print to screen
-		putchar(*ptr);
+		putchar(ptr[index]);
+		int ch;
 		break;
 	case ',':
 		//get user input
-        *ptr = getchar();
+        ptr[index] = getchar();
+		// celan the input stream
+		while ((ch = getchar()) != '\n' && ch !=EOF );
 		break;
 	case '[':
 		break;
@@ -93,7 +94,7 @@ int interpretInstruction (char* instruction, unsigned char* ptr, uint index)
 		break;
 	}
 
-	return 0;
+	return index;
 }
 
 
