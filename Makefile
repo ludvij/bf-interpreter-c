@@ -23,24 +23,33 @@ WINOBJS = $(addprefix $(WINOBJDIR)/, $(SRCS:.c=.o))
 
 .PHONY: all prep clean linux win
 
+
+
 # default build
-all: prep linux
+all: prep debug linux
 
 linux: $(EXE)
 
 $(EXE): $(OBJS)
-	$(CC) $(CFLAGS) $(DBGFLAGS) -o $(EXE) $^
+	$(CC) $(CFLAGS) -o $(EXE) $^
 
 $(OBJDIR)/%.o: %.c
-	$(CC) -c $(CFLAGS) $(DBGFLAGS) -o $@ $<
+	$(CC) -c $(CFLAGS) -o $@ $<
 
 win: prep $(WINEXE)
 
 $(WINEXE): $(WINOBJS)
-	$(CCWIN) $(CFLAGS) $(DBGFLAGS) -o $(WINEXE) $(CFLAGS) $^
+	$(CCWIN) $(CFLAGS) -o $(WINEXE) $^
 
 $(WINOBJDIR)/%.o: %.c
-	$(CCWIN) -c $(CFLAGS) $(DBGFLAGS) -o $@ $<
+	$(CCWIN) -c $(CFLAGS) -o $@ $<
+
+
+debug:
+	$(CFLAGS) += $(DBGFLAGS)
+
+release:
+	$(CFLAGS) += $(RELFLAGS)
 
 
 clean:
