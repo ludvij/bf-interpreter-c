@@ -21,7 +21,7 @@ WINOBJDIR  = obj/win
 WINOBJS = $(addprefix $(WINOBJDIR)/, $(SRCS:.c=.o))
 
 
-.PHONY: all clean linux win
+.PHONY: all prep clean linux win
 
 # default build
 all: prep linux
