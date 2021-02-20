@@ -1,12 +1,6 @@
 # compiler settings
 CC = clang
-CFLAGS = -Wall -std=c17
-
-# projext files
-OBJDIR = obj
-SRCS   = main.c stack.c fileUtils.c
-OBJS   = $(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
-EXE    = bfi
+CFLAGS = -Wall -Wextra -std=c17
 
 # debug stuff
 DBGFLAGS = -g -O0
@@ -14,20 +8,34 @@ DBGFLAGS = -g -O0
 # release stuff
 RELFLAGS = -O3
 
-# wondows stuff
-CCWIN   = x86_64-w64-mingw32-gcc
-WINEXE  = $(EXE).exe
-WINOBJDIR  = obj/win
-WINOBJS = $(addprefix $(WINOBJDIR)/, $(SRCS:.c=.o))
+DEBUG ?= 1
+ifeq ($(DEBUG), 1)
+	CFLAGS += $(DBGFLAGS)
+else
+	CFLAGS += $(RELFLAGS)
+endif
+
+# projext files
+OBJDIR = obj
+SRCS   = main.c stack.c fileUtils.c
+OBJS   = $(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
+EXE    = bfi
+
+# windows stuff
+CCWIN   	= x86_64-w64-mingw32-gcc
+WINOBJS 	= $(addprefix $(WINOBJDIR)/, $(SRCS:.c=.o))
+WINOBJDIR  	= obj/win
+WINEXE  	= $(EXE).exe
+
 
 
 .PHONY: all prep clean linux win
 
-
-
 # default build
-all: prep debug linux
+all: prep linux
+	
 
+# linux build
 linux: $(EXE)
 
 $(EXE): $(OBJS)
@@ -36,6 +44,7 @@ $(EXE): $(OBJS)
 $(OBJDIR)/%.o: %.c
 	$(CC) -c $(CFLAGS) -o $@ $<
 
+# windows build
 win: prep $(WINEXE)
 
 $(WINEXE): $(WINOBJS)
@@ -43,13 +52,6 @@ $(WINEXE): $(WINOBJS)
 
 $(WINOBJDIR)/%.o: %.c
 	$(CCWIN) -c $(CFLAGS) -o $@ $<
-
-
-debug:
-	$(CFLAGS) += $(DBGFLAGS)
-
-release:
-	$(CFLAGS) += $(RELFLAGS)
 
 
 clean:

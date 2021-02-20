@@ -16,7 +16,7 @@
 typedef unsigned int uint;
 
 int interpretCode(char* code);
-int interpretInstruction(char* instruction, unsigned char* ptr, uint index);
+int interpretInstruction(char* instruction, unsigned char* ptr, int index);
 
 
 int interpretCode (char* code)
@@ -30,7 +30,7 @@ int interpretCode (char* code)
 	// but I think it looks cleaner
 	for (uint i = 0; i < MAX_MEM_SIZE; i++)
 		memory[i] = 0;
-	uint index = 0;
+	int index = 0;
 	while (*code != 0) {
 		index = interpretInstruction(code, memory, index);
 		if (index < 0) {
@@ -44,7 +44,7 @@ int interpretCode (char* code)
 	return 0;
 }
 
-int interpretInstruction (char* instruction, unsigned char* ptr, uint index)
+int interpretInstruction (char* instruction, unsigned char* ptr, int index)
 {
 	// instead of using some operator junk like (*index)++ or something like that
 	// i just prefer to store the value in a variable and then just store it there
