@@ -17,22 +17,22 @@ endif
 
 # projext files
 OBJDIR = obj
-SRCS   = main.c stack.c fileUtils.c
+SRCS   = main.c fileUtils.c
 OBJS   = $(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
 EXE    = bfi
 
 # windows stuff
-CCWIN   	= x86_64-w64-mingw32-gcc
+CCWIN		= x86_64-w64-mingw32-gcc
 WINOBJS 	= $(addprefix $(WINOBJDIR)/, $(SRCS:.c=.o))
-WINOBJDIR  	= obj/win
-WINEXE  	= $(EXE).exe
+WINOBJDIR	= obj/win
+WINEXE		= $(EXE).exe
 
 
 
 .PHONY: all prep clean linux win
 
 # default build
-all: prep linux
+all: DEBUG=1 prep linux
 	
 
 # linux build
