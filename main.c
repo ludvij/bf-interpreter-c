@@ -102,7 +102,10 @@ int executeCode(char* code)
 	int res = interpretCode(code, 0, memory, 0);
 	if (res < 0){
 		free(memory);
-		printf("[ERROR]\n");
+		if (res == VALUE_OUT_OF_BOUNDS)
+			printf("[ERROR]: some error occured in the increment of decrement of a value\n");
+		else if (res == MEMORY_OUT_OF_BOUNDS)
+			printf("[ERROR]: some error ocured in the position of the memory pointer\n");
 		return -1;
 	}
 	// add a new line to make the terminal thing start in its own line
